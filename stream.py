@@ -8,7 +8,7 @@ picam.create_still_configuration(lores={"size": lsize})
 with Image.open(picam.start_and_capture_file(show_preview=False)) as image:
     (left, upper, right, lower) = (20, 20, 100, 100)
     crop = image.crop((left, upper, right, lower))
-Image.open(crop).save("image.jpg", "jpg")
+Image.fromarray(crop).save("image.jpg","jpg")
 
 #lsize = (320, 240))
 #picam.start()
