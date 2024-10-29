@@ -5,4 +5,5 @@ cur = picam.capture_buffer()
 lsize = (320, 240)
 w, h = 320, 240
 cur = cur[:w * h].reshape(h, w)
+picam.start()
 print(cur)
