@@ -228,6 +228,7 @@ if __name__ == "__main__":
         print(intrinsics)
         exit()
 
+
     picam2 = Picamera2(imx500.camera_num)
     config = picam2.create_video_configuration(controls={"FrameRate": intrinsics.inference_rate}, buffer_count=12)
     encoder = H264Encoder(1000000)
