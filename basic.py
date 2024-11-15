@@ -280,8 +280,9 @@ if __name__ == "__main__":
         last_results = None
         picam2.pre_callback = draw_detections
         output = StreamingOutput()
-        picam2.start_recording(JpegEncoder(), FileOutput(output))
         last_results = parse_detections(picam2.capture_metadata())
+        picam2.start_recording(JpegEncoder(), FileOutput(output))
+
         while True:
             try:
                 address = ('', 8000)
