@@ -17,7 +17,7 @@ from picamera2.devices.imx500 import (NetworkIntrinsics,
 
 import cv2
 import numpy as np
-start_time = time.time()
+
 from picamera2.encoders import H264Encoder
 from picamera2.outputs import FileOutput
 import io
@@ -279,7 +279,7 @@ if __name__ == "__main__":
         if intrinsics.preserve_aspect_ratio:
             imx500.set_auto_aspect_ratio()
 
-
+        last_results = None
         picam2.pre_callback = draw_detections
         output = StreamingOutput()
 
@@ -287,11 +287,11 @@ if __name__ == "__main__":
 
         while True:
             try:
-                last_results = None
+                last_results = parse_detections(picam2.capture_metadata())
                 address = ('', 8000)
                 server = StreamingServer(address, StreamingHandler)
                 server.handle_request()
-                last_results = parse_detections(picam2.capture_metadata())
+
             finally:
                 picam2.stop_recording()
 
