@@ -281,13 +281,13 @@ if __name__ == "__main__":
         picam2.pre_callback = draw_detections
         output = StreamingOutput()
         picam2.start_recording(JpegEncoder(), FileOutput(output))
-
+        last_results = parse_detections(picam2.capture_metadata())
         while True:
             try:
                 address = ('', 8000)
                 server = StreamingServer(address, StreamingHandler)
                 server.serve_forever()
-                last_results = parse_detections(picam2.capture_metadata())
+
             finally:
                 picam2.stop_recording()
 
