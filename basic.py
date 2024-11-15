@@ -279,7 +279,7 @@ if __name__ == "__main__":
         if intrinsics.preserve_aspect_ratio:
             imx500.set_auto_aspect_ratio()
 
-        last_results = None
+
         picam2.pre_callback = draw_detections
         output = StreamingOutput()
 
@@ -287,12 +287,11 @@ if __name__ == "__main__":
 
         while True:
             try:
-
+                last_results = None
                 address = ('', 8000)
                 server = StreamingServer(address, StreamingHandler)
                 server.handle_request()
-                if time.time()-start_time > 1:
-                    last_results = parse_detections(picam2.capture_metadata())
+                last_results = parse_detections(picam2.capture_metadata())
             finally:
                 picam2.stop_recording()
 
