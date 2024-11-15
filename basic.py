@@ -2,9 +2,14 @@ import argparse
 import sys
 import time
 from typing import List
+import socket
 
 import cv2
 import numpy as np
+
+from picamera2.encoders import H264Encoder
+from picamera2.outputs import FileOutput
+
 
 from picamera2 import CompletedRequest, MappedArray, Picamera2
 from picamera2.devices import IMX500
@@ -147,9 +152,23 @@ if __name__ == "__main__":
 
     picam2 = Picamera2(imx500.camera_num)
     config = picam2.create_video_configuration(controls={"FrameRate": intrinsics.inference_rate}, buffer_count=12)
+    encoder = H264Encoder(1000000)
 
     imx500.show_network_fw_progress_bar()
-    picam2.start(config, show_preview=False)
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.bind(("0.0.0.0", 10001))
+        sock.listen()
+
+        picam2.encoders = encoder
+
+        conn, addr = sock.accept()
+        stream = conn.makefile("wb")
+        encoder.output = FileOutput(stream)
+        picam2.configure(config)
+        picam2.start_encoder(encoder)
+        picam2.start()
     if intrinsics.preserve_aspect_ratio:
         imx500.set_auto_aspect_ratio()
     # Register the callback to parse and draw classification results
