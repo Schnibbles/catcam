@@ -17,7 +17,7 @@ from picamera2.devices.imx500 import (NetworkIntrinsics,
 
 import cv2
 import numpy as np
-
+start_time = time.time()
 from picamera2.encoders import H264Encoder
 from picamera2.outputs import FileOutput
 import io
@@ -291,7 +291,8 @@ if __name__ == "__main__":
                 address = ('', 8000)
                 server = StreamingServer(address, StreamingHandler)
                 server.handle_request()
-                last_results = parse_detections(picam2.capture_metadata())
+                if time.time()-start_time > 1:
+                    last_results = parse_detections(picam2.capture_metadata())
             finally:
                 picam2.stop_recording()
 
