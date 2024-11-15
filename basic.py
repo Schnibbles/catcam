@@ -234,6 +234,12 @@ if __name__ == "__main__":
     encoder = H264Encoder(1000000)
     picam2.configure(config)
     imx500.show_network_fw_progress_bar()
+
+    if intrinsics.preserve_aspect_ratio:
+        imx500.set_auto_aspect_ratio()
+    # Register the callback to parse and draw classification results
+    picam2.pre_callback = parse_and_draw_classification_results
+
     output = StreamingOutput()
     picam2.start_recording(JpegEncoder(), FileOutput(output))
     try:
@@ -243,13 +249,9 @@ if __name__ == "__main__":
     finally:
         picam2.stop_recording()
 
-    if intrinsics.preserve_aspect_ratio:
-        imx500.set_auto_aspect_ratio()
-    # Register the callback to parse and draw classification results
-    picam2.pre_callback = parse_and_draw_classification_results
+
 
     while True:
-        print(label)
         time.sleep(0.5)
 
 # Mostly copied from https://picamera.readthedocs.io/en/release-1.13/recipes2.html
