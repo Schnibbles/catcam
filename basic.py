@@ -111,14 +111,14 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
 
     last_detections = []
 
-    class Detection:
+class Detection:
         def __init__(self, coords, category, conf, metadata):
             """Create a Detection object, recording the bounding box, category and confidence."""
             self.category = category
             self.conf = conf
             self.box = imx500.convert_inference_coords(coords, metadata, picam2)
 
-    def parse_detections(metadata: dict):
+def parse_detections(metadata: dict):
         """Parse the output tensor into a number of detected objects, scaled to the ISP output."""
         global last_detections
         bbox_normalization = intrinsics.bbox_normalization
@@ -155,14 +155,14 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
         return last_detections
 
     @lru_cache
-    def get_labels():
+def get_labels():
         labels = intrinsics.labels
 
         if intrinsics.ignore_dash_labels:
             labels = [label for label in labels if label and label != "-"]
         return labels
 
-    def draw_detections(request, stream="main"):
+def draw_detections(request, stream="main"):
         """Draw the detections for this request onto the ISP output."""
         detections = last_results
         if detections is None:
@@ -204,7 +204,7 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
                 cv2.putText(m.array, "ROI", (b_x + 5, b_y + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
                 cv2.rectangle(m.array, (b_x, b_y), (b_x + b_w, b_y + b_h), (255, 0, 0, 0))
 
-    def get_args():
+def get_args():
         parser = argparse.ArgumentParser()
         parser.add_argument("--model", type=str, help="Path of the model",
                             default="/usr/share/imx500-models/imx500_network_ssd_mobilenetv2_fpnlite_320x320_pp.rpk")
@@ -226,7 +226,7 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
                             help="Print JSON network_intrinsics then exit")
         return parser.parse_args()
 
-    if __name__ == "__main__":
+if __name__ == "__main__":
         args = get_args()
 
         # This must be called before instantiation of Picamera2
@@ -278,14 +278,4 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
             picam2.stop_recording()
         while True:
             last_results = parse_detections(picam2.capture_metadata())
-
-
-
-
-
-
-
-# Mostly copied from https://picamera.readthedocs.io/en/release-1.13/recipes2.html
-# Run this script, then point a web browser at http:<this-ip-address>:8000
-# Note: needs simplejpeg to be installed (pip3 install simplejpeg).
 
