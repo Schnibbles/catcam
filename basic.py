@@ -176,6 +176,7 @@ def get_labels():
 def draw_detections(request, stream="main"):
         """Draw the detections for this request onto the ISP output."""
         global last_results
+        last_results = parse_detections(picam2.capture_metadata())
         detections = last_results
         if detections is None:
             return
@@ -216,7 +217,7 @@ def draw_detections(request, stream="main"):
                 cv2.putText(m.array, "ROI", (b_x + 5, b_y + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
                 cv2.rectangle(m.array, (b_x, b_y), (b_x + b_w, b_y + b_h), (255, 0, 0, 0))
 
-            last_results = parse_detections(picam2.capture_metadata())
+
 
 def get_args():
         parser = argparse.ArgumentParser()
