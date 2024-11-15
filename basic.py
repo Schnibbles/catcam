@@ -7,7 +7,7 @@ from picamera2.encoders import H264Encoder
 from picamera2.outputs import FileOutput
 from picamera2.devices import IMX500
 
-imx500 = IMX500()
+imx500 = IMX500("/usr/share/imx500-models/imx500_network_mobilenet_v2.rpk")
 picam2 = Picamera2(imx500.camera_num)
 video_config = picam2.create_video_configuration({"size": (1280, 720)})
 picam2.configure(video_config)
