@@ -291,7 +291,7 @@ if __name__ == "__main__":
             try:
                 address = ('', 8000)
                 server = StreamingServer(address, StreamingHandler)
-                server.serve_forever()
+                server.handle_request()
                 last_results = parse_detections(picam2.capture_metadata())
             finally:
                 picam2.stop_recording()
