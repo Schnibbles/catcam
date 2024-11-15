@@ -230,8 +230,7 @@ if __name__ == "__main__":
 
 
     picam2 = Picamera2(imx500.camera_num)
-    config = picam2.create_video_configuration(controls={"FrameRate": intrinsics.inference_rate}, buffer_count=12)
-    encoder = H264Encoder(1000000)
+    config = picam2.create_video_configuration(main={"size": (1920, 1080)}, controls={"FrameRate": intrinsics.inference_rate}, buffer_count=12)
     picam2.configure(config)
     imx500.show_network_fw_progress_bar()
 
