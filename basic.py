@@ -55,6 +55,8 @@ def parse_classification_results(request: CompletedRequest) -> List[Classificati
     return last_detections
 
 
+label = ""
+
 def draw_classification_results(request: CompletedRequest, results: List[Classification], stream: str = "main"):
     """Draw the classification results for this request onto the ISP output."""
     with MappedArray(request, stream) as m:
@@ -69,6 +71,7 @@ def draw_classification_results(request: CompletedRequest, results: List[Classif
             text_left, text_top = 0, 0
         # Drawing labels (in the ROI box if it exists)
         for index, result in enumerate(results):
+            global label
             label = get_label(request, idx=result.idx)
             text = f"{label}: {result.score:.3f}"
 
@@ -153,5 +156,5 @@ if __name__ == "__main__":
     picam2.pre_callback = parse_and_draw_classification_results
 
     while True:
-        print(get_label(request: CompletedRequest, idx: int))
+        print(label)
         time.sleep(0.5)
