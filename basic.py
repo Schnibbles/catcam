@@ -175,8 +175,6 @@ def get_labels():
 
 def draw_detections(request, stream="main"):
         """Draw the detections for this request onto the ISP output."""
-        global last_results
-        last_results = parse_detections(picam2.capture_metadata())
         detections = last_results
         if detections is None:
             return
@@ -281,7 +279,7 @@ if __name__ == "__main__":
         if intrinsics.preserve_aspect_ratio:
             imx500.set_auto_aspect_ratio()
 
-#        last_results = None
+        last_results = None
         picam2.pre_callback = draw_detections
         output = StreamingOutput()
 
@@ -289,6 +287,7 @@ if __name__ == "__main__":
 
         while True:
             try:
+
                 address = ('', 8000)
                 server = StreamingServer(address, StreamingHandler)
                 server.handle_request()
