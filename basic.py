@@ -153,4 +153,5 @@ if __name__ == "__main__":
     picam2.pre_callback = parse_and_draw_classification_results
 
     while True:
+        print(get_label())
         time.sleep(0.5)
