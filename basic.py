@@ -269,7 +269,7 @@ if __name__ == "__main__":
             exit()
 
         picam2 = Picamera2(imx500.camera_num)
-        config = picam2.create_video_configuration(main={"size": (1920, 1080)}, controls={"FrameRate": intrinsics.inference_rate}, buffer_count=12)
+        config = picam2.create_video_configuration(controls={"FrameRate": intrinsics.inference_rate}, buffer_count=12)
 
         imx500.show_network_fw_progress_bar()
         picam2.configure(config)
@@ -277,10 +277,10 @@ if __name__ == "__main__":
         if intrinsics.preserve_aspect_ratio:
             imx500.set_auto_aspect_ratio()
 
-        last_results = None
+#        last_results = None
         picam2.pre_callback = draw_detections
         output = StreamingOutput()
-        last_results = parse_detections(picam2.capture_metadata())
+
         picam2.start_recording(JpegEncoder(), FileOutput(output))
 
         while True:
@@ -288,7 +288,7 @@ if __name__ == "__main__":
                 address = ('', 8000)
                 server = StreamingServer(address, StreamingHandler)
                 server.serve_forever()
-
+#                last_results = parse_detections(picam2.capture_metadata())
             finally:
                 picam2.stop_recording()
 
