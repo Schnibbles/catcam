@@ -154,7 +154,7 @@ def parse_detections(metadata: dict):
         ]
         return last_detections
 
-    @lru_cache
+@lru_cache
 def get_labels():
         labels = intrinsics.labels
 
