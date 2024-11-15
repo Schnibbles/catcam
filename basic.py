@@ -1,11 +1,14 @@
 import socket
 import time
 
+import picamera2
 from picamera2 import Picamera2
 from picamera2.encoders import H264Encoder
 from picamera2.outputs import FileOutput
+from picamera2.devices import IMX500
 
-picam2 = Picamera2()
+imx500 = IMX500()
+picam2 = Picamera2(imx500.camera_num)
 video_config = picam2.create_video_configuration({"size": (1280, 720)})
 picam2.configure(video_config)
 encoder = H264Encoder(1000000)
