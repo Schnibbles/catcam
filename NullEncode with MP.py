@@ -196,7 +196,8 @@ if __name__ == "__main__":
         print("encoder started")
 
     pool = multiprocessing.Pool(processes=4)
-    jobs = queue.Queue()
+    queue_queue = queue.Queue()
+    jobs = queue_queue
 
     thread = threading.Thread(target=draw_detections, args=(jobs,))
     thread.start()
