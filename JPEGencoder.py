@@ -197,3 +197,5 @@ if __name__ == "__main__":
     while True:
         if picam2.capture_metadata() is not None:
             last_results = parse_detections(picam2.capture_metadata())
+            if last_results is not None:
+                print(get_labels())
