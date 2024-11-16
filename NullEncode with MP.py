@@ -72,7 +72,8 @@ def draw_detections(jobs):
     labels = get_labels()
     # Wait for result from child processes in the order submitted.
     last_detections = []
-    while (job := queue.Queue().get()) is not None:
+    global jobs
+    while (job := jobs.get()) is not None:
         request, async_result = job
         detections = async_result.get()
         if detections is None:
@@ -187,7 +188,7 @@ if __name__ == "__main__":
         conn, addr = sock.accept()
         stream = conn.makefile("wb")
         encoder.output = FileOutput(stream)
-        picam2.pre_callback = draw_detections
+        picam2.post_callback = draw_detections
         picam2.start(config)
 
         picam2.start_encoder(encoder=encoder)
