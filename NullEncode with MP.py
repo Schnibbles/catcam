@@ -171,7 +171,7 @@ if __name__ == "__main__":
     picam2 = Picamera2(imx500.camera_num)
     main = {'format': 'RGB888'}
     config = picam2.create_video_configuration(controls={"FrameRate": intrinsics.inference_rate}, buffer_count=12)
-
+    picam2.post_callback = draw_detections
     imx500.show_network_fw_progress_bar()
 
     if intrinsics.preserve_aspect_ratio:
@@ -204,7 +204,7 @@ if __name__ == "__main__":
     while True:
         # The request gets released by handle_results
         request = picam2.capture_request()
-        picam2.pre_callback = draw_detections
+
         metadata = request.get_metadata()
         if metadata:
             async_result = pool.apply_async(parse_detections, (metadata,))
