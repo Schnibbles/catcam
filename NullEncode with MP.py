@@ -173,7 +173,7 @@ if __name__ == "__main__":
     config = picam2.create_video_configuration(controls={"FrameRate": intrinsics.inference_rate}, buffer_count=12)
 
     imx500.show_network_fw_progress_bar()
-    picam2.start(config, show_preview=False)
+    picam2.start(config)
     if intrinsics.preserve_aspect_ratio:
         imx500.set_auto_aspect_ratio()
 
@@ -200,20 +200,16 @@ if __name__ == "__main__":
         picam2.start_encoder(encoder=encoder)
         print("encoder started")
 
+    picam2.pre_callback = draw_detections
     while True:
         # The request gets released by handle_results
         request = picam2.capture_request()
         metadata = request.get_metadata()
-        x = 1
         if metadata:
-
             async_result = pool.apply_async(parse_detections, (metadata,))
             jobs.put((request, async_result))
-            print(x)
-
         else:
             request.release()
-        x = x + 1
 
 
 #    picam2.pre_callback = draw_detections
