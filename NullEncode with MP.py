@@ -9,7 +9,7 @@ import socket
 import cv2
 import numpy as np
 from picamera2.outputs import FileOutput
-from picamera2.encoders import Encoder
+from picamera2.encoders import H264Encoder
 import time
 from picamera2 import MappedArray, Picamera2
 from picamera2.devices import IMX500
@@ -178,7 +178,7 @@ if __name__ == "__main__":
         imx500.set_auto_aspect_ratio()
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        encoder = Encoder()
+        encoder = H264Encoder(1000000)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("0.0.0.0", 10001))
         sock.listen()
