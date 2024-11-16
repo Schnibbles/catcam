@@ -173,7 +173,7 @@ if __name__ == "__main__":
     config = picam2.create_video_configuration(controls={"FrameRate": intrinsics.inference_rate}, buffer_count=12)
 
     imx500.show_network_fw_progress_bar()
-    picam2.start(config)
+
     if intrinsics.preserve_aspect_ratio:
         imx500.set_auto_aspect_ratio()
 
@@ -190,6 +190,7 @@ if __name__ == "__main__":
         encoder.output = FileOutput(stream)
         picam2.start_encoder(encoder=encoder)
         print("encoder started")
+    picam2.start(config)
     pool = multiprocessing.Pool(processes=4)
     jobs = queue.Queue()
 
