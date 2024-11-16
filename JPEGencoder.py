@@ -170,9 +170,12 @@ if __name__ == "__main__":
     picam2 = Picamera2(imx500.camera_num)
     config = picam2.create_video_configuration(controls={"FrameRate": intrinsics.inference_rate}, buffer_count=12)
     encoder = Encoder()
-    picam2.configure(config)
 
     imx500.show_network_fw_progress_bar()
+    picam2.start(config, show_preview=False)
+
+    picam2.pre_callback = draw_detections
+
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("0.0.0.0", 10001))
@@ -184,12 +187,10 @@ if __name__ == "__main__":
         stream = conn.makefile("wb")
         encoder.output = FileOutput(stream)
         picam2.start_encoder(encoder=encoder)
-        picam2.start(config, show_preview=False)
 
     if intrinsics.preserve_aspect_ratio:
         imx500.set_auto_aspect_ratio()
 
     last_results = None
-    picam2.pre_callback = draw_detections
     while True:
         last_results = parse_detections(picam2.capture_metadata())
