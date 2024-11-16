@@ -205,8 +205,11 @@ if __name__ == "__main__":
         request = picam2.capture_request()
         metadata = request.get_metadata()
         if metadata:
+            x = 1
             async_result = pool.apply_async(parse_detections, (metadata,))
             jobs.put((request, async_result))
+            print(x)
+            x = x + 1
         else:
             request.release()
 
