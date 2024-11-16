@@ -183,7 +183,7 @@ if __name__ == "__main__":
         conn, addr = sock.accept()
         stream = conn.makefile("wb")
         encoder.output = FileOutput(stream)
-        Picamera2().start_encoder(encoder)
+        picam2.start_encoder(encoder=encoder)
         picam2.start()
 
     if intrinsics.preserve_aspect_ratio:
