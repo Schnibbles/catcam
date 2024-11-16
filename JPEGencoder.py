@@ -184,7 +184,7 @@ if __name__ == "__main__":
         stream = conn.makefile("wb")
         encoder.output = FileOutput(stream)
         picam2.start_encoder(encoder=encoder)
-        picam2.start()
+        picam2.start(config, show_preview=False)
 
     if intrinsics.preserve_aspect_ratio:
         imx500.set_auto_aspect_ratio()
