@@ -195,4 +195,5 @@ if __name__ == "__main__":
     last_results = None
     picam2.pre_callback = draw_detections
     while True:
-        last_results = parse_detections(picam2.capture_metadata())
+        if picam2.capture_metadata() is not None:
+            last_results = parse_detections(picam2.capture_metadata())
