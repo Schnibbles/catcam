@@ -73,8 +73,7 @@ def draw_detections(jobs):
     # Wait for result from child processes in the order submitted.
     last_detections = []
     while (job := jobs.get()) is not None:
-#    while True:
-        request, async_result = jobs.get()
+        request, async_result = job
         detections = async_result.get()
         if detections is None:
             detections = last_detections
