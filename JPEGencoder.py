@@ -175,7 +175,7 @@ if __name__ == "__main__":
     imx500.show_network_fw_progress_bar()
     picam2.start(config, show_preview=False)
 
-    picam2.pre_callback = draw_detections
+
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -193,5 +193,6 @@ if __name__ == "__main__":
         imx500.set_auto_aspect_ratio()
 
     last_results = None
+    picam2.pre_callback = draw_detections
     while True:
         last_results = parse_detections(picam2.capture_metadata())
