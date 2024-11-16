@@ -6,7 +6,7 @@ import socket
 import cv2
 import numpy as np
 from picamera2.outputs import FileOutput
-from picamera2.encoders import Encoder
+from picamera2.encoders import H264Encoder
 import time
 from picamera2 import MappedArray, Picamera2
 from picamera2.devices import IMX500
@@ -170,7 +170,7 @@ if __name__ == "__main__":
 
     picam2 = Picamera2(imx500.camera_num)
     config = picam2.create_video_configuration(controls={"FrameRate": intrinsics.inference_rate}, buffer_count=12)
-    encoder = Encoder()
+    encoder = H264Encoder()
 
     imx500.show_network_fw_progress_bar()
     picam2.start(config, show_preview=False)

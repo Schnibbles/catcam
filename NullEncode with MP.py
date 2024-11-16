@@ -16,7 +16,6 @@ from picamera2.devices import IMX500
 from picamera2.devices.imx500 import (NetworkIntrinsics,
                                       postprocess_nanodet_detection)
 
-jobs = queue.Queue()
 class Detection:
     def __init__(self, coords, category, conf, metadata):
         """Create a Detection object, recording the bounding box, category and confidence."""
@@ -72,7 +71,6 @@ def draw_detections(jobs):
     labels = get_labels()
     # Wait for result from child processes in the order submitted.
     last_detections = []
-    global jobs
     while (job := jobs.get()) is not None:
         request, async_result = job
         detections = async_result.get()
