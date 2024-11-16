@@ -185,7 +185,6 @@ if __name__ == "__main__":
 
 
     imx500.show_network_fw_progress_bar()
-    picam2.start(config, show_preview=False)
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         encoder = Encoder()
