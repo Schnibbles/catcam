@@ -74,7 +74,7 @@ def draw_detections(jobs):
     last_detections = []
 #    while (job := jobs.get()) is not None:
     while True:
-        request, async_result = jobs.get()
+        request, async_result = queue.Queue().get()
         detections = async_result.get()
         if detections is None:
             detections = last_detections
