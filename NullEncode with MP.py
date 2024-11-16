@@ -189,6 +189,7 @@ if __name__ == "__main__":
         stream = conn.makefile("wb")
         encoder.output = FileOutput(stream)
         picam2.start(config)
+        picam2.pre_callback = draw_detections
         picam2.start_encoder(encoder=encoder)
 
         print("encoder started")
@@ -200,7 +201,6 @@ if __name__ == "__main__":
     thread.start()
 
 
-#    picam2.pre_callback = draw_detections
     while True:
         # The request gets released by handle_results
         request = picam2.capture_request()
