@@ -198,6 +198,7 @@ if __name__ == "__main__":
         stream = conn.makefile("wb")
         encoder.output = FileOutput(stream)
         picam2.start_encoder(encoder=encoder)
+        print("encoder started")
 
     while True:
         # The request gets released by handle_results
