@@ -177,12 +177,12 @@ if __name__ == "__main__":
         sock.bind(("0.0.0.0", 10001))
         sock.listen()
 
-        picam2.encoders = encoder
+        Picamera2().encoders = encoder
 
         conn, addr = sock.accept()
         stream = conn.makefile("wb")
         encoder.output = FileOutput(stream)
-        picam2.start_encoder(encoder)
+        Picamera2().start_encoder(encoder)
         picam2.start()
 
     if intrinsics.preserve_aspect_ratio:
