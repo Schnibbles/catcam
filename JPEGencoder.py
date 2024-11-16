@@ -170,6 +170,7 @@ if __name__ == "__main__":
     picam2 = Picamera2(imx500.camera_num)
     config = picam2.create_video_configuration(controls={"FrameRate": intrinsics.inference_rate}, buffer_count=12)
     encoder = Encoder()
+    picam2.configure(config)
 
     imx500.show_network_fw_progress_bar()
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -177,7 +178,7 @@ if __name__ == "__main__":
         sock.bind(("0.0.0.0", 10001))
         sock.listen()
 
-        Picamera2().encoders = encoder
+        picam2.encoders = encoder
 
         conn, addr = sock.accept()
         stream = conn.makefile("wb")
