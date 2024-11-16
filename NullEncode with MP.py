@@ -189,7 +189,7 @@ if __name__ == "__main__":
         stream = conn.makefile("wb")
         encoder.output = FileOutput(stream)
         picam2.start(config)
-        picam2.pre_callback = draw_detections
+
         picam2.start_encoder(encoder=encoder)
 
         print("encoder started")
@@ -204,6 +204,7 @@ if __name__ == "__main__":
     while True:
         # The request gets released by handle_results
         request = picam2.capture_request()
+        picam2.pre_callback = draw_detections
         metadata = request.get_metadata()
         if metadata:
             async_result = pool.apply_async(parse_detections, (metadata,))
