@@ -204,14 +204,16 @@ if __name__ == "__main__":
         # The request gets released by handle_results
         request = picam2.capture_request()
         metadata = request.get_metadata()
+        x = 1
         if metadata:
-            x = 1
+
             async_result = pool.apply_async(parse_detections, (metadata,))
             jobs.put((request, async_result))
             print(x)
-            x = x + 1
+
         else:
             request.release()
+        x = x + 1
 
 
 #    picam2.pre_callback = draw_detections
