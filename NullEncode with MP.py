@@ -72,8 +72,7 @@ def draw_detections(jobs):
     labels = get_labels()
     # Wait for result from child processes in the order submitted.
     last_detections = []
-#    while (job := jobs.get()) is not None:
-    while True:
+    while (job := jobs.get()) is not None:
         request, async_result = job
         detections = async_result.get()
         if detections is None:
@@ -172,7 +171,6 @@ if __name__ == "__main__":
     picam2 = Picamera2(imx500.camera_num)
     main = {'format': 'RGB888'}
     config = picam2.create_video_configuration(controls={"FrameRate": intrinsics.inference_rate}, buffer_count=12)
-    picam2.post_callback = draw_detections
     imx500.show_network_fw_progress_bar()
 
     if intrinsics.preserve_aspect_ratio:
@@ -196,8 +194,7 @@ if __name__ == "__main__":
         print("encoder started")
 
     pool = multiprocessing.Pool(processes=4)
-    queue_queue = queue.Queue()
-    jobs = queue_queue
+    jobs = queue.Queue()
 
     thread = threading.Thread(target=draw_detections, args=(jobs,))
     thread.start()
