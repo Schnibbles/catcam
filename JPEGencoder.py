@@ -14,6 +14,7 @@ from picamera2.devices.imx500 import (NetworkIntrinsics,
                                       postprocess_nanodet_detection)
 
 last_detections = []
+last_results = None
 
 
 class Detection:
