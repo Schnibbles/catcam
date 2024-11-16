@@ -70,9 +70,13 @@ def get_labels():
         labels = [label for label in labels if label and label != "-"]
     return labels
 
+label = None
+
 
 def draw_detections(request, stream="main"):
     """Draw the detections for this request onto the ISP output."""
+    global label
+    label = None
     detections = last_results
     if detections is None:
         return
@@ -80,6 +84,7 @@ def draw_detections(request, stream="main"):
     with MappedArray(request, stream) as m:
         for detection in detections:
             x, y, w, h = detection.box
+
             label = f"{labels[int(detection.category)]} ({detection.conf:.2f})"
 
             # Calculate text size and position
@@ -197,5 +202,5 @@ if __name__ == "__main__":
     while True:
         if picam2.capture_metadata() is not None:
             last_results = parse_detections(picam2.capture_metadata())
-            if last_results is not None:
-                print(get_labels())
+            if label is not None:
+                print(label)
