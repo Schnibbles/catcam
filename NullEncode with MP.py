@@ -177,15 +177,6 @@ if __name__ == "__main__":
     if intrinsics.preserve_aspect_ratio:
         imx500.set_auto_aspect_ratio()
 
-    pool = multiprocessing.Pool(processes=4)
-    jobs = queue.Queue()
-
-    thread = threading.Thread(target=draw_detections, args=(jobs,))
-    thread.start()
-
-
-    imx500.show_network_fw_progress_bar()
-
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         encoder = Encoder()
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -199,8 +190,18 @@ if __name__ == "__main__":
         encoder.output = FileOutput(stream)
         picam2.start_encoder(encoder=encoder)
         print("encoder started")
+    pool = multiprocessing.Pool(processes=4)
+    jobs = queue.Queue()
 
-    picam2.pre_callback = draw_detections
+    thread = threading.Thread(target=draw_detections, args=(jobs,))
+    thread.start()
+
+
+    imx500.show_network_fw_progress_bar()
+
+
+
+#    picam2.pre_callback = draw_detections
     while True:
         # The request gets released by handle_results
         request = picam2.capture_request()
