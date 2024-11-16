@@ -29,7 +29,7 @@ def parse_detections(metadata: dict):
     """Parse the output tensor into a number of detected objects, scaled to the ISP output."""
     global last_detections
     bbox_normalization = intrinsics.bbox_normalization
-    bbox_order = intrinsics.bbox_order
+    bbox_order = "xy"
     threshold = args.threshold
     iou = args.iou
     max_detections = args.max_detections
