@@ -188,18 +188,16 @@ if __name__ == "__main__":
         conn, addr = sock.accept()
         stream = conn.makefile("wb")
         encoder.output = FileOutput(stream)
+        picam2.start(config)
         picam2.start_encoder(encoder=encoder)
+
         print("encoder started")
-    picam2.start(config)
+
     pool = multiprocessing.Pool(processes=4)
     jobs = queue.Queue()
 
     thread = threading.Thread(target=draw_detections, args=(jobs,))
     thread.start()
-
-
-    imx500.show_network_fw_progress_bar()
-
 
 
 #    picam2.pre_callback = draw_detections
